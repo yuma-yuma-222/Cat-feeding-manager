@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MARUINO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* ボタンを包む「箱」の設定 */
+        .button-container {
+            display: flex;
+            /* 横並びにする */
+            justify-content: space-around;
+            /* 均等に間隔を空ける */
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        /* 各フォームとボタンの設定 */
+        form {
+            flex: 1;
+            /* 3つのボタンが同じ幅になるように分け合う */
+            margin: 5px;
+            /* ボタン同士の横の隙間 */
+        }
+
+        button {
+            width: 100%;
+            height: 250px;
+            /* 高さを固定 */
+            font-size: 30px;
+            /* 文字サイズ */
+            font-weight: bold;
+            border-radius: 12px;
+            /* 角丸 */
+            border: none;
+            background-color: #4CAF50;
+            /* 緑色 */
+            color: white;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button:disabled {
+            background-color: #ddd;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>MARUINO</h1>
+    <p>ようこそ</p>
+    <p>本日は{{ today_str }}です</p>
+    <p>只今の時刻：<span id="time"></span></p>
+
+    <script>
+        // 現在時刻を1秒ごとに更新
+        setInterval(async () => {
+            const res = await fetch("/time")
+            const data = await res.json()
+            document.getElementById("time").innerText = data.time
+        }, 1000)
+    </script>
+
+    <script>
+        // 給餌時刻を1秒ごとに更新
+        setInterval(async () => {
+            const res = await fetch("/feed-time")
+            const data = await res.json()
+            data.logs.forEach(log => {
+                const el = document.getElementById(log.time_of_day)
+                if (el) el.innerText = log.time + " にごはんあげた"
+            })
+        }, 1000)
+    </script>
+
+    <!-- このボタンを押したら /feed にPOSTリクエストを送る -->
+    <div class="button-container">
+        {% for s in schedule %}
+
+        {# 1. すでにごはんをあげた場合 → キャンセルボタンを表示 #}
+        {% if s.time_of_day in fed %}
+        <form action="/cancel_feed" method="post">
+            <button type="submit" name="time_of_day" value="{{s.time_of_day}}" style="background-color: #888;">
+                ごはん消去<br>(キャンセル)
+            </button>
+            <p id="{{ s.time_of_day }}" style="font-size: 14px; color: #333;"></p>
+        </form>
+
+        {# 2. まだあげていない ＆ 時間が来ている場合 → 給餌ボタンを表示 #}
+        {% elif now >= s.available_from %}
+        <form action="/feed" method="post">
+            <button type="submit" name="time_of_day" value="{{s.time_of_day}}">
+                {% if s.time_of_day == "morning" %}朝ごはん
+                {% elif s.time_of_day == "afternoon" %}昼ごはん
+                {% elif s.time_of_day == "evening" %}夜ごはん
+                {% endif %}
+            </button>
+            <p id="{{ s.time_of_day }}" style="font-size: 14px; color: #333;"></p>
+        </form>
+
+        {# 3. まだ時間が来ていない場合 → グレーアウトして準備中を表示 #}
+        {% else %}
+        <form>
+            <button type="button" disabled style="background-color: #ddd; color: #888;">
+                準備中<br>({{ s.available_from.strftime("%H:%M") }}〜)
+            </button>
+        </form>
+
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <video autoplay muted loop style="width: 100%; max-width: 600px; display: block; margin: 20px auto;">
+        <source src="/movie/short.mov" type="video/mov">
+    </video>
+
+    <!-- <script>
+    setInterval(function(){
+        location.reload();
+    }, 60000); // 1分ごとにページをリロード
+    </script> -->
+
+</body>
+
+</html>
