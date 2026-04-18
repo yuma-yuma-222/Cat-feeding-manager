@@ -1,19 +1,30 @@
 ## MARUINO Project
 
 これはdomaとnororiの共同プロジェクトです．
-MARUINOといいます．
+またの名をMARUINOといいます．
 これは私の飼っている猫の頭文字から取得しました．
 - MARU
 - RUI
 - NONO
 
-## プロジェクトの期間
+## Features
+- 朝・昼・夜の給餌をワンクリックで記録
+- 給餌時刻をリアルタイムで表示
+- 家族全員で給餌状況を共有
 
-目標は**約１ヶ月**です．
-これから頑張っていきましょう．
+## Setup
+```bash
+git clone https://github.com/yuma-yuma-222/Cat-feeding-manager.git
+cd Cat-feeding-manager
+pip install -r requirements.txt
+```
 
+## Usage
+```bash
+uvicorn src.main:app --reload
+```
 
-## 猫たち
+## my cats
 ↓maru
 ![maru](images/maru.jpg)
 
