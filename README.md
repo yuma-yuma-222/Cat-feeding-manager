@@ -21,7 +21,8 @@ pip install -r requirements.txt
 
 ## Usage
 ```bash
-uvicorn src.main:app --reload
+cd src
+uvicorn main:app --reload
 ```
 
 ## my cats
