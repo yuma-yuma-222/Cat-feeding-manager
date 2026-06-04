@@ -1,6 +1,6 @@
 ## MARUINO Project
 
-これはdomaとnororiの共同プロジェクトです．
+これはyumaとnororiの共同プロジェクトです．
 またの名をMARUINOといいます．
 これは私の飼っている猫の頭文字から取得しました．
 - MARU
