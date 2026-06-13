@@ -1,20 +1,11 @@
 # MARUINO - 猫の給餌管理アプリ
 
-<<<<<<< HEAD
-これはyumaとnororiの共同プロジェクトです．
-またの名をMARUINOといいます．
-これは私の飼っている猫の頭文字から取得しました．
-- MARU
-- RUI
-- NONO
-=======
-domaとnororiの共同プロジェクトです。\
+yumaとnororiの共同プロジェクトです。\
 3匹の猫の頭文字から **MARUINO** と名付けました。
 
 - **MARU**
 - **RUI**
 - **NONO**
->>>>>>> d216c08 (README.md修正)
 
 ## Features
 
